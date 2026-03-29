@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background-color: #FDFAF6; color: #1C1C2E; -webkit-font-smoothing: antialiased; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #FAF4EC; }
+::-webkit-scrollbar-thumb { background: #D4A843; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #C4687A; }
+
+.hero-gradient {
+  background: radial-gradient(ellipse at 30% 50%, rgba(196,104,122,0.1) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(212,168,67,0.08) 0%, transparent 50%), #FDFAF6;
+}
+.gift-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.gift-card:hover { transform: translateY(-6px); box-shadow: 0 12px 48px rgba(196,104,122,0.2); }
+.btn-primary { background: linear-gradient(135deg, #C4687A 0%, #8B3A4A 100%); transition: all 0.3s ease; }
+.btn-primary:hover { box-shadow: 0 8px 24px rgba(196,104,122,0.4); transform: translateY(-2px); }
+.btn-gold { background: linear-gradient(135deg, #D4A843 0%, #9A7320 100%); transition: all 0.3s ease; }
+.btn-gold:hover { box-shadow: 0 8px 24px rgba(212,168,67,0.4); transform: translateY(-2px); }
+.deco-border { border: 1px solid rgba(212,168,67,0.2); }
+.img-zoom-container { overflow: hidden; }
+.img-zoom-container img { transition: transform 0.5s ease; }
+.img-zoom-container:hover img { transform: scale(1.08); }
+.ribbon { position: absolute; top: 12px; left: -4px; background: #C4687A; color: white; font-size: 11px; font-weight: 600; padding: 3px 12px 3px 10px; clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 50%, 100% 100%, 0 100%); letter-spacing: 0.05em; text-transform: uppercase; z-index: 10; }
+input[type=range] { accent-color: #C4687A; }
