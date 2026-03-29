@@ -14,7 +14,7 @@ const Footer: React.FC = () => (
           <p className="text-sm text-cream-300 font-body leading-relaxed mb-5">Making every gifting moment unforgettable. Curated with love, delivered with care.</p>
           <div className="flex gap-3">
             {[Globe, Share2, Rss].map((Icon, i) => (
-              <a key={i} href="#" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#C4687A] transition-colors"><Icon size={16} /></a>
+              <button key={i} type="button" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#C4687A] transition-colors"><Icon size={16} /></button>
             ))}
           </div>
         </div>
