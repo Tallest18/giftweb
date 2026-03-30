@@ -4,11 +4,13 @@ import { CheckCircle, Package, Truck, Home, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Confetti from 'react-confetti';
 import { Order } from '../types';
-import { formatNaira } from '../hooks/usePaystack';
+import { useCartStore } from '../store/cartStore';
+import { formatPrice } from '../hooks/usePaystack';
 
 const OrderSuccessPage: React.FC = () => {
   const location = useLocation();
   const order = location.state?.order as Order | undefined;
+  const currency = useCartStore(s => s.currency);
   const [showConfetti, setShowConfetti] = useState(true);
   const [size, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });
 
@@ -54,15 +56,15 @@ const OrderSuccessPage: React.FC = () => {
                     <p className="font-body font-medium text-charcoal-dark text-sm truncate">{item.product.name}</p>
                     <p className="text-xs text-charcoal-light font-body">Qty: {item.quantity}</p>
                   </div>
-                  <p className="font-display font-bold text-charcoal-dark text-sm">{formatNaira(item.product.price * item.quantity)}</p>
+                  <p className="font-display font-bold text-charcoal-dark text-sm">{formatPrice(item.product.price * item.quantity, currency)}</p>
                 </div>
               ))}
             </div>
             <div className="border-t border-cream-200 pt-3 space-y-1 text-sm font-body text-charcoal-light">
-              <div className="flex justify-between"><span>Subtotal</span><span>{formatNaira(order.subtotal)}</span></div>
-              {order.giftWrapFee > 0 && <div className="flex justify-between"><span>Gift wrap</span><span>{formatNaira(order.giftWrapFee)}</span></div>}
-              <div className="flex justify-between"><span>Delivery</span><span className={order.deliveryFee===0?'text-green-600':''}>{order.deliveryFee===0?'FREE':formatNaira(order.deliveryFee)}</span></div>
-              <div className="flex justify-between font-display font-bold text-charcoal-dark text-lg pt-1"><span>Total Paid</span><span>{formatNaira(order.total)}</span></div>
+              <div className="flex justify-between"><span>Subtotal</span><span>{formatPrice(order.subtotal, currency)}</span></div>
+              {order.giftWrapFee > 0 && <div className="flex justify-between"><span>Gift wrap</span><span>{formatPrice(order.giftWrapFee, currency)}</span></div>}
+              <div className="flex justify-between"><span>Delivery</span><span className={order.deliveryFee===0?'text-green-600':''}>{order.deliveryFee===0?'FREE':formatPrice(order.deliveryFee, currency)}</span></div>
+              <div className="flex justify-between font-display font-bold text-charcoal-dark text-lg pt-1"><span>Total Paid</span><span>{formatPrice(order.total, currency)}</span></div>
             </div>
             {order.deliveryAddress && (
               <div className="mt-4 bg-cream-50 rounded-2xl p-4 border border-cream-200">

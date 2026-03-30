@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Gift, Tag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '../store/cartStore';
-import { formatNaira } from '../hooks/usePaystack';
+import { formatPrice } from '../hooks/usePaystack';
 
 const CartPage: React.FC = () => {
-  const { items, removeItem, updateQuantity, toggleGiftWrap, clearCart, getSubtotal, getItemCount } = useCartStore();
+  const { items, removeItem, updateQuantity, toggleGiftWrap, clearCart, getSubtotal, getItemCount, currency } = useCartStore();
   const [coupon, setCoupon] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponError, setCouponError] = useState('');
@@ -72,7 +72,7 @@ const CartPage: React.FC = () => {
                           <span className="px-3 text-sm font-body font-semibold text-charcoal-dark">{item.quantity}</span>
                           <button onClick={() => updateQuantity(item.product.id, item.quantity+1)} className="px-3 py-1.5 hover:bg-cream-200 transition-colors"><Plus size={13} /></button>
                         </div>
-                        <p className="font-display font-bold text-charcoal-dark text-lg">{formatNaira((item.product.price+(item.selectedVariant?.priceModifier||0))*item.quantity)}</p>
+                        <p className="font-display font-bold text-charcoal-dark text-lg">{formatPrice((item.product.price+(item.selectedVariant?.priceModifier||0))*item.quantity, currency)}</p>
                       </div>
                       <button onClick={() => toggleGiftWrap(item.product.id)}
                         className={`mt-3 flex items-center gap-1.5 text-xs font-body rounded-full px-3 py-1.5 border transition-all ${item.giftWrap?'border-[#C4687A] bg-[#C4687A]/5 text-[#C4687A] font-medium':'border-cream-200 text-charcoal-light hover:border-[#C4687A]'}`}>
@@ -90,13 +90,13 @@ const CartPage: React.FC = () => {
             <div className="bg-white rounded-2xl p-6 border border-cream-200 shadow-card sticky top-28">
               <h2 className="font-display text-xl font-bold text-charcoal-dark mb-5">Order Summary</h2>
               <div className="space-y-3 mb-5">
-                <div className="flex justify-between text-sm font-body text-charcoal-mid"><span>Subtotal ({getItemCount()} items)</span><span>{formatNaira(subtotal)}</span></div>
-                {giftWrapFee > 0 && <div className="flex justify-between text-sm font-body text-charcoal-mid"><span>Gift wrapping</span><span>{formatNaira(giftWrapFee)}</span></div>}
+                <div className="flex justify-between text-sm font-body text-charcoal-mid"><span>Subtotal ({getItemCount()} items)</span><span>{formatPrice(subtotal, currency)}</span></div>
+                {giftWrapFee > 0 && <div className="flex justify-between text-sm font-body text-charcoal-mid"><span>Gift wrapping</span><span>{formatPrice(giftWrapFee, currency)}</span></div>}
                 <div className="flex justify-between text-sm font-body text-charcoal-mid">
                   <span>Delivery</span>
-                  <span className={delivery===0?'text-green-600 font-medium':''}>{delivery===0?'FREE':formatNaira(delivery)}</span>
+                  <span className={delivery===0?'text-green-600 font-medium':''}>{delivery===0?'FREE':formatPrice(delivery, currency)}</span>
                 </div>
-                {discount > 0 && <div className="flex justify-between text-sm font-body text-green-600 font-medium"><span>Discount (GIFTLY10)</span><span>-{formatNaira(discount)}</span></div>}
+                {discount > 0 && <div className="flex justify-between text-sm font-body text-green-600 font-medium"><span>Discount (GIFTLY10)</span><span>-{formatPrice(discount, currency)}</span></div>}
               </div>
 
               <div className="mb-5">
@@ -114,9 +114,9 @@ const CartPage: React.FC = () => {
               </div>
 
               <div className="border-t border-cream-200 pt-4 mb-5">
-                <div className="flex justify-between font-display font-bold text-charcoal-dark text-xl"><span>Total</span><span>{formatNaira(total)}</span></div>
+                <div className="flex justify-between font-display font-bold text-charcoal-dark text-xl"><span>Total</span><span>{formatPrice(total, currency)}</span></div>
                 {delivery === 0 && <p className="text-xs text-green-600 font-body mt-1">🎉 You qualify for free delivery!</p>}
-                {delivery > 0 && <p className="text-xs text-charcoal-light font-body mt-1">Add {formatNaira(20000-subtotal)} more for free delivery</p>}
+                {delivery > 0 && <p className="text-xs text-charcoal-light font-body mt-1">Add {formatPrice(20000-subtotal, currency)} more for free delivery</p>}
               </div>
 
               <Link to="/checkout" className="btn-primary w-full text-white py-4 rounded-full font-body font-semibold flex items-center justify-center gap-2 text-base">

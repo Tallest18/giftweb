@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { products } from '../data/products';
 import { useCartStore } from '../store/cartStore';
-import { formatNaira } from '../hooks/usePaystack';
+import { formatPrice } from '../hooks/usePaystack';
 import ProductCard from '../components/shop/ProductCard';
 import { ProductVariant } from '../types';
 
@@ -13,6 +13,7 @@ const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const product = products.find(p => p.id === id);
   const addItem = useCartStore(s => s.addItem);
+  const currency = useCartStore(s => s.currency);
   const [imgIdx, setImgIdx] = useState(0);
   const [variant, setVariant] = useState<ProductVariant | undefined>(product?.variants?.[0]);
   const [qty, setQty] = useState(1);
@@ -81,8 +82,8 @@ const ProductPage: React.FC = () => {
               <span className="text-sm text-charcoal-light font-body">({product.reviews} reviews)</span>
             </div>
             <div className="flex items-baseline gap-3 mb-6">
-              <span className="font-display text-4xl font-bold text-charcoal-dark">{formatNaira(price)}</span>
-              {product.originalPrice && <span className="text-xl text-charcoal-light line-through font-body">{formatNaira(product.originalPrice)}</span>}
+              <span className="font-display text-4xl font-bold text-charcoal-dark">{formatPrice(price, currency)}</span>
+              {product.originalPrice && <span className="text-xl text-charcoal-light line-through font-body">{formatPrice(product.originalPrice, currency)}</span>}
               {discount && <span className="text-sm bg-[#D4A843]/15 text-[#9A7320] font-bold px-2.5 py-1 rounded-full font-body">-{discount}% OFF</span>}
             </div>
 
@@ -93,7 +94,7 @@ const ProductPage: React.FC = () => {
                   {product.variants.map(v => (
                     <button key={v.id} onClick={() => setVariant(v)}
                       className={`px-4 py-2 rounded-full text-sm font-body border transition-all ${variant?.id===v.id?'border-[#C4687A] bg-[#C4687A]/5 text-[#C4687A] font-medium':'border-cream-200 text-charcoal-mid hover:border-[#C4687A]'}`}>
-                      {v.value}{v.priceModifier && v.priceModifier>0 ? ` (+${formatNaira(v.priceModifier)})` : ''}
+                      {v.value}{v.priceModifier && v.priceModifier>0 ? ` (+${formatPrice(v.priceModifier, currency)})` : ''}
                     </button>
                   ))}
                 </div>

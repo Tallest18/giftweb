@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ProductCard from '../components/shop/ProductCard';
 import { products, categories } from '../data/products';
 import { Category } from '../types';
-import { formatNaira } from '../hooks/usePaystack';
+import { formatPrice } from '../hooks/usePaystack';
 import { useCartStore } from '../store/cartStore';
 import toast from 'react-hot-toast';
 
@@ -26,6 +26,7 @@ const ShopPage: React.FC = () => {
   const [maxPrice, setMaxPrice] = useState(100000);
   const [gridView, setGridView] = useState(true);
   const addItem = useCartStore(s => s.addItem);
+  const currency = useCartStore(s => s.currency);
 
   const activeCategory = (searchParams.get('category') || 'all') as Category;
   const setCategory = (cat: Category) => {
@@ -106,7 +107,7 @@ const ShopPage: React.FC = () => {
           {filterOpen && (
             <motion.div initial={{ height:0, opacity:0 }} animate={{ height:'auto', opacity:1 }} exit={{ height:0, opacity:0 }} className="overflow-hidden mb-6">
               <div className="bg-white rounded-2xl p-6 border border-cream-200 shadow-card">
-                <h3 className="font-display font-semibold text-charcoal-dark mb-4">Max Price: {formatNaira(maxPrice)}</h3>
+                <h3 className="font-display font-semibold text-charcoal-dark mb-4">Max Price: {formatPrice(maxPrice, currency)}</h3>
                 <input type="range" min={1000} max={100000} step={1000} value={maxPrice} onChange={e => setMaxPrice(Number(e.target.value))} className="w-full" />
               </div>
             </motion.div>
@@ -139,7 +140,7 @@ const ShopPage: React.FC = () => {
                     <p className="text-sm text-charcoal-light font-body line-clamp-2">{p.description}</p>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <p className="font-display text-xl font-bold text-charcoal-dark mb-2">{formatNaira(p.price)}</p>
+                    <p className="font-display text-xl font-bold text-charcoal-dark mb-2">{formatPrice(p.price, currency)}</p>
                     <button onClick={() => { addItem(p); toast.success('Added to cart! 🎁', { style:{ background:'#1C1C2E', color:'#FAF4EC', fontFamily:'DM Sans', borderRadius:'12px' } }); }}
                       className="btn-primary text-white px-5 py-2 rounded-full text-sm font-body font-medium">Add to Cart</button>
                   </div>
